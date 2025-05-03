@@ -78,7 +78,7 @@ class TypeAdapterGenerator extends GeneratorForAnnotation<HiveType> {
   Set<String> getAllAccessorNames(InterfaceElement interface) {
     var accessorNames = <String>{};
 
-    var supertypes = interface.allSupertypes.map((it) => it.element2);
+    var supertypes = interface.allSupertypes.map((it) => it.element);
     for (var type in [interface, ...supertypes]) {
       for (var accessor in type.accessors) {
         if (accessor.isSetter) {
@@ -103,9 +103,9 @@ class TypeAdapterGenerator extends GeneratorForAnnotation<HiveType> {
       var getter = interface.lookUpGetter(name, library);
       if (getter != null) {
         var getterAnn =
-            getHiveFieldAnn(getter.variable) ?? getHiveFieldAnn(getter);
+            getHiveFieldAnn(getter.declaration) ?? getHiveFieldAnn(getter);
         if (getterAnn != null) {
-          var field = getter.variable;
+          var field = getter.declaration;
           getters.add(AdapterField(
             getterAnn.index,
             field.name,
@@ -118,9 +118,9 @@ class TypeAdapterGenerator extends GeneratorForAnnotation<HiveType> {
       var setter = interface.lookUpSetter('$name=', library);
       if (setter != null) {
         var setterAnn =
-            getHiveFieldAnn(setter.variable) ?? getHiveFieldAnn(setter);
+            getHiveFieldAnn(setter.declaration) ?? getHiveFieldAnn(setter);
         if (setterAnn != null) {
-          var field = setter.variable;
+          var field = setter.declaration;
           setters.add(AdapterField(
             setterAnn.index,
             field.name,
